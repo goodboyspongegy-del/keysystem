@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A.APK.PANEL — Official Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg0:#020208;--bg1:#07070f;--bg2:#0d0d1c;--bg3:#13132a;--bg4:#1a1a35;
+  --acc:#6366f1;--acc2:#a855f7;--grn:#10b981;--red:#ef4444;--yel:#f59e0b;
+  --cyn:#06b6d4;--vip:#a855f7;--trust:#3b82f6;
+  --t1:#f0f1ff;--t2:#9ca3c8;--t3:#4b5280;--t4:#2a2d4a;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg0);color:var(--t1);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.08}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(2,2,8,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(99,102,241,.12);padding:0 32px;height:62px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:18px;font-weight:900;letter-spacing:1px;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--t3);text-decoration:none;font-size:13px;font-weight:500;transition:.15s}
+.nav-links a:hover{color:var(--t1)}
+.nav-cta{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;text-decoration:none}
+.nav-cta:hover{opacity:.85}
+@media(max-width:640px){.nav-links{display:none}}
+
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* Hero */
+.hero{padding:130px 0 70px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.22);border-radius:20px;padding:6px 16px;font-size:12px;color:var(--acc);font-weight:600;letter-spacing:.5px;margin-bottom:28px}
+.hero h1{font-size:clamp(40px,6.5vw,72px);font-weight:900;line-height:1.06;letter-spacing:-2px;margin-bottom:22px}
+.grad-text{background:linear-gradient(135deg,var(--acc),var(--acc2),var(--cyn));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:17px;color:var(--t2);max-width:560px;margin:0 auto 36px;line-height:1.65}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:56px}
+.btn-p{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;padding:14px 30px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;text-decoration:none;display:inline-block}
+.btn-p:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 8px 28px rgba(99,102,241,.32)}
+.btn-o{background:transparent;color:var(--t1);border:1px solid var(--t4);padding:14px 30px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s;text-decoration:none;display:inline-block}
+.btn-o:hover{border-color:var(--acc);color:var(--acc)}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--t4);border:1px solid var(--t4);border-radius:14px;overflow:hidden}
+.stat{background:var(--bg1);padding:24px 16px;text-align:center}
+.stat-n{font-size:34px;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-l{font-size:11px;color:var(--t3);margin-top:5px;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+
+section{padding:72px 0}
+.sec-eye{font-size:11px;color:var(--acc);font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
+.sec-h{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:14px;line-height:1.15}
+.sec-sub{font-size:15px;color:var(--t2);line-height:1.65;max-width:520px}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--t4),transparent)}
+
+/* Feature grid */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:36px}
+@media(max-width:720px){.feat-grid,.tier-grid{grid-template-columns:1fr}}
+.feat{background:var(--bg1);border:1px solid var(--t4);border-radius:14px;padding:24px;transition:.2s}
+.feat:hover{border-color:rgba(99,102,241,.35);transform:translateY(-2px)}
+.feat-ico{font-size:22px;margin-bottom:12px}
+.feat h3{font-size:16px;font-weight:700;margin-bottom:7px}
+.feat p{font-size:13px;color:var(--t2);line-height:1.6}
+
+/* Tiers */
+.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px;max-width:680px}
+.tier-card{border:1px solid var(--t4);border-radius:16px;padding:28px;background:var(--bg1);position:relative;overflow:hidden}
+.tier-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.tc-vip::before{background:linear-gradient(90deg,#a855f7,#c084fc)}
+.tc-trust::before{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.tier-badge{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;margin-bottom:14px}
+.b-vip{background:rgba(168,85,247,.12);color:#a855f7;border:1px solid rgba(168,85,247,.28)}
+.b-trust{background:rgba(59,130,246,.12);color:#3b82f6;border:1px solid rgba(59,130,246,.28)}
+.tier-card h3{font-size:18px;font-weight:800;margin-bottom:6px}
+.tier-card .sub{font-size:13px;color:var(--t3);margin-bottom:16px}
+.feat-list{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
+.feat-list li{font-size:13px;color:var(--t2);display:flex;gap:8px}
+.feat-list li::before{content:'✓';color:var(--grn);font-weight:800;flex-shrink:0}
+.tier-btn{width:100%;padding:11px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s}
+.tb-vip{background:rgba(168,85,247,.12);color:#a855f7;border:1px solid rgba(168,85,247,.25)}
+.tb-vip:hover{background:rgba(168,85,247,.25)}
+.tb-trust{background:rgba(59,130,246,.12);color:#3b82f6;border:1px solid rgba(59,130,246,.25)}
+.tb-trust:hover{background:rgba(59,130,246,.25)}
+
+/* Rules */
+.rules{display:flex;flex-direction:column;gap:10px;margin-top:28px;max-width:700px}
+.rule{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;background:var(--bg1);border:1px solid var(--t4);border-radius:12px}
+.rnum{min-width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.rtxt h4{font-size:14px;font-weight:700;margin-bottom:3px}
+.rtxt p{font-size:13px;color:var(--t2);line-height:1.5}
+
+/* ── KEY GENERATOR ── */
+#keygen{background:var(--bg1);border-top:1px solid var(--t4);border-bottom:1px solid var(--t4)}
+.gen-wrap{max-width:660px;margin:0 auto}
+
+/* Steps */
+.steps{display:flex;gap:8px;margin-bottom:28px}
+.step{flex:1;text-align:center;padding:14px 6px;background:var(--bg2);border:1px solid var(--t4);border-radius:10px}
+.step-n{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 6px}
+.step-n.done{background:var(--grn)}
+.step p{font-size:11px;color:var(--t3);font-weight:500}
+
+/* Tier selector */
+.sel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.sel-t{padding:18px;border:1px solid var(--t4);border-radius:10px;background:var(--bg2);cursor:pointer;text-align:center;transition:.15s;user-select:none}
+.sel-t:hover{border-color:var(--acc)}
+.sel-t.active-vip{border-color:#a855f7;background:rgba(168,85,247,.1)}
+.sel-t.active-trust{border-color:#3b82f6;background:rgba(59,130,246,.1)}
+.sel-ico{font-size:24px;margin-bottom:6px}
+.sel-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.sel-desc{font-size:11px;color:var(--t3)}
+
+/* Verification box */
+.verify-box{background:var(--bg2);border:1px solid var(--t4);border-radius:12px;padding:24px;margin-bottom:20px;display:none}
+.verify-box.show{display:block}
+.v-header{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.v-icon{width:38px;height:38px;border-radius:9px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.22);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.v-title{font-size:15px;font-weight:700;color:var(--yel)}
+.v-sub{font-size:12px;color:var(--t3)}
+.v-body{font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:16px}
+
+/* Timer */
+.timer-wrap{padding:16px 18px;background:var(--bg3);border-radius:10px;display:none}
+.timer-wrap.show{display:block}
+.timer-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.timer-num{font-size:36px;font-weight:900;color:var(--acc);font-family:'JetBrains Mono',monospace;line-height:1}
+.timer-lbl{font-size:12px;color:var(--t3);text-align:right}
+.timer-bar-bg{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden}
+.timer-bar-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:4px;transition:width 1s linear}
+.timer-msg{font-size:12px;color:var(--t3);margin-top:10px;text-align:center}
+
+.v-start-btn{width:100%;padding:12px;border-radius:8px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);color:var(--acc);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;margin-top:0}
+.v-start-btn:hover:not(:disabled){background:rgba(99,102,241,.22)}
+.v-start-btn:disabled{opacity:.35;cursor:not-allowed}
+.v-done-btn{width:100%;padding:12px;border-radius:8px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:var(--grn);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;margin-top:10px;display:none}
+.v-done-btn.show{display:block}
+.v-done-btn:hover{background:rgba(16,185,129,.24)}
+
+/* Form */
+.gen-form{display:none}
+.gen-form.show{display:block}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.fi{width:100%;background:var(--bg2);border:1px solid var(--t4);border-radius:8px;color:var(--t1);padding:10px 12px;font-size:13px;font-family:inherit;outline:none;transition:.15s;margin-bottom:14px}
+.fi:focus{border-color:var(--acc)}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gen-btn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:.2s;margin-top:4px}
+.gen-btn:hover:not(:disabled){opacity:.88;transform:translateY(-1px)}
+.gen-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.gen-status{text-align:center;font-size:13px;margin-top:10px;min-height:20px;font-weight:500}
+
+/* Result */
+.result{display:none;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.22);border-radius:12px;padding:20px;margin-top:16px}
+.result.show{display:block}
+.r-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.r-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;min-width:66px;font-weight:600}
+.r-val{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;flex:1;word-break:break-all}
+.copy-btn{background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.22);color:var(--acc);font-size:11px;padding:5px 11px;border-radius:6px;cursor:pointer;font-family:inherit;transition:.12s;white-space:nowrap}
+.copy-btn:hover{background:rgba(99,102,241,.28)}
+.r-note{font-size:11px;color:var(--t3);margin-top:10px;padding:10px;background:var(--bg2);border-radius:6px;line-height:1.55}
+
+/* Key table */
+.tbl-head{display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:10px}
+.tbl-title{font-size:12px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px}
+.tbl-search{background:var(--bg2);border:1px solid var(--t4);border-radius:7px;color:var(--t1);padding:7px 12px;font-size:12px;font-family:inherit;outline:none;width:200px}
+.tbl-search:focus{border-color:var(--acc)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--t4);border-radius:10px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{color:var(--t3);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px;padding:10px 12px;background:var(--bg2);border-bottom:1px solid var(--t4);text-align:left}
+td{padding:10px 12px;border-bottom:1px solid rgba(42,45,74,.4);color:var(--t2)}
+td.mono{font-family:'JetBrains Mono',monospace}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(99,102,241,.04)}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.bv{background:rgba(168,85,247,.12);color:#a855f7;border:1px solid rgba(168,85,247,.25)}
+.bt{background:rgba(59,130,246,.12);color:#3b82f6;border:1px solid rgba(59,130,246,.25)}
+.ba{background:rgba(16,185,129,.12);color:#10b981;border:1px solid rgba(16,185,129,.25)}
+.bu{background:rgba(80,82,100,.1);color:var(--t3);border:1px solid rgba(80,82,100,.2)}
+.del-btn{background:none;border:none;color:var(--t4);cursor:pointer;padding:2px 7px;border-radius:4px;font-size:13px}
+.del-btn:hover{color:var(--red);background:rgba(239,68,68,.1)}
+.tbl-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.tbl-btn{padding:8px 15px;border-radius:7px;border:1px solid var(--t4);background:var(--bg2);color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
+.tbl-btn:hover{border-color:var(--acc);color:var(--acc)}
+.tbl-btn.d:hover{border-color:var(--red);color:var(--red)}
+.export-box{width:100%;background:var(--bg0);border:1px solid var(--t4);border-radius:8px;color:var(--acc);font-family:'JetBrains Mono',monospace;font-size:11px;padding:12px;min-height:100px;resize:vertical;outline:none;margin-top:10px;line-height:1.55}
+
+/* FAQ */
+.faq{display:flex;flex-direction:column;gap:8px;margin-top:28px;max-width:700px}
+.faq-item{background:var(--bg1);border:1px solid var(--t4);border-radius:12px;overflow:hidden}
+.faq-q{padding:17px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:600;user-select:none}
+.faq-q:hover{color:var(--acc)}
+.arrow{color:var(--t3);transition:.2s;font-size:11px}
+.faq-item.open .arrow{transform:rotate(90deg);color:var(--acc)}
+.faq-a{display:none;padding:0 20px 16px;font-size:13px;color:var(--t2);line-height:1.7}
+.faq-item.open .faq-a{display:block}
+
+footer{border-top:1px solid var(--t4);padding:36px 0;text-align:center;color:var(--t3);font-size:13px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--acc);border-radius:10px;padding:12px 20px;font-size:13px;z-index:9999;transform:translateY(80px);opacity:0;transition:.3s;pointer-events:none;max-width:280px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.err{border-color:var(--red)}
+@media(max-width:540px){.stats{grid-template-columns:repeat(2,1fr)}.fr2{grid-template-columns:1fr}.steps{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <div class="nav-logo">A.APK.PANEL</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#tiers">Tiers</a></li>
+    <li><a href="#rules">Rules</a></li>
+    <li><a href="#keygen">Get Key</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#keygen" class="nav-cta">Get Access ⚡</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">⚡ A.APK.PANEL v11 — Official Access Portal</div>
+    <h1>The Most Advanced<br><span class="grad-text">Roblox Admin Panel</span></h1>
+    <p class="hero-sub">Generate your personal access key instantly. No redirects, no waiting on other sites — just a quick verify on this page and your key is ready.</p>
+    <div class="hero-btns">
+      <a href="#keygen" class="btn-p">⚡ Get My Key</a>
+      <a href="#tiers" class="btn-o">View Tiers</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-n">230+</div><div class="stat-l">Commands</div></div>
+      <div class="stat"><div class="stat-n">2</div><div class="stat-l">Public Tiers</div></div>
+      <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Secure</div></div>
+      <div class="stat"><div class="stat-n">7s</div><div class="stat-l">Login Time</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- About -->
+<section id="about">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center">
+      <div>
+        <div class="sec-eye">About</div>
+        <h2 class="sec-h">What is A.APK.PANEL?</h2>
+        <p class="sec-sub">A custom-built admin system for Roblox with 230+ working commands, real-time events, a built-in AI, and a secure key-based login system. Built and maintained exclusively by Kshusha319.</p>
+        <p class="sec-sub" style="margin-top:12px">Every login is validated against a live database. Random keys typed by players are always rejected. Only keys generated here work.</p>
+      </div>
+      <div class="feat-grid" style="grid-template-columns:1fr 1fr;margin-top:0">
+        <div class="feat"><div class="feat-ico">⚡</div><h3>Instant Login</h3><p>7-second animated login with tier badge.</p></div>
+        <div class="feat"><div class="feat-ico">🔐</div><h3>Secure Keys</h3><p>Live validation — random guesses always fail.</p></div>
+        <div class="feat"><div class="feat-ico">🎮</div><h3>230+ Commands</h3><p>Full control over players, world, and events.</p></div>
+        <div class="feat"><div class="feat-ico">🤖</div><h3>Chat AI</h3><p>Built-in AI monitors chat and responds.</p></div>
+      </div>
+    </div>
+    <div class="feat-grid" style="margin-top:20px">
+      <div class="feat"><div class="feat-ico">🌊</div><h3>Real Events</h3><p>Flood, Blood Moon, Meteor Shower, DJ Party — each with real physics, lighting, and sounds.</p></div>
+      <div class="feat"><div class="feat-ico">📋</div><h3>Report System</h3><p>Players report rule-breakers. Admins manage and act on reports directly from the panel.</p></div>
+      <div class="feat"><div class="feat-ico">💬</div><h3>Bubble Chat</h3><p>Broadcast messages through any player's head with custom colours, sizes, and durations.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Tiers -->
+<section id="tiers" style="background:var(--bg1)">
+  <div class="wrap">
+    <div class="sec-eye">Access Tiers</div>
+    <h2 class="sec-h">Choose Your Level</h2>
+    <p class="sec-sub">VIP and Trusted are the only tiers available publicly. Admin and above are invite-only.</p>
+    <div class="tier-grid">
+      <div class="tier-card tc-vip">
+        <div class="tier-badge b-vip">⭐ VIP</div>
+        <h3>VIP Access</h3>
+        <p class="sub">Basic panel access for verified members</p>
+        <ul class="feat-list">
+          <li>Access the A.APK.PANEL GUI</li>
+          <li>View server info &amp; player list</li>
+          <li>Send bubble chat messages</li>
+          <li>Spectate other players</li>
+          <li>VIP commands tab</li>
+        </ul>
+        <button class="tier-btn tb-vip" onclick="scrollGen('VIP')">⭐ Get VIP Key</button>
+      </div>
+      <div class="tier-card tc-trust">
+        <div class="tier-badge b-trust">🔵 Trusted</div>
+        <h3>Trusted Access</h3>
+        <p class="sub">Moderation access for trusted members</p>
+        <ul class="feat-list">
+          <li>Everything in VIP</li>
+          <li>Moderation commands (warn, mute, freeze)</li>
+          <li>View action logs</li>
+          <li>Manage player effects &amp; appearance</li>
+          <li>Standard command set</li>
+        </ul>
+        <button class="tier-btn tb-trust" onclick="scrollGen('Trusted')">🔵 Get Trusted Key</button>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:14px 18px;background:var(--bg2);border:1px solid var(--t4);border-radius:10px;font-size:13px;color:var(--t3);max-width:680px">
+      ℹ <strong style="color:var(--t2)">Admin and higher ranks are invitation-only</strong> and are not available here. Contact Kshusha319 directly.
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Rules -->
+<section id="rules">
+  <div class="wrap">
+    <div class="sec-eye">Server Rules</div>
+    <h2 class="sec-h">Universal Rules</h2>
+    <p class="sec-sub">These rules apply in every server running A.APK.PANEL. Breaking them results in key revocation and/or a ban.</p>
+    <div class="rules">
+      <div class="rule"><div class="rnum">1</div><div class="rtxt"><h4>No Exploiting or Cheating</h4><p>Using exploits, hacks, or unauthorised scripts = immediate permanent ban. Zero tolerance.</p></div></div>
+      <div class="rule"><div class="rnum">2</div><div class="rtxt"><h4>Respect All Players</h4><p>No harassment, bullying, hate speech, or discrimination. Treat everyone with basic respect.</p></div></div>
+      <div class="rule"><div class="rnum">3</div><div class="rtxt"><h4>No Spamming or Flooding</h4><p>Do not spam chat, bubble chat, or commands. Repeated violations = mute or access removed.</p></div></div>
+      <div class="rule"><div class="rnum">4</div><div class="rtxt"><h4>Do Not Share Your Key</h4><p>Your key is personal. Sharing it voids it immediately. Each key is for one person only.</p></div></div>
+      <div class="rule"><div class="rnum">5</div><div class="rtxt"><h4>Listen to Admins</h4><p>Admin decisions are final. Disputes go to Kshusha319 directly — not in-game arguments.</p></div></div>
+      <div class="rule"><div class="rnum">6</div><div class="rtxt"><h4>No Command Abuse</h4><p>Panel access is a privilege. Abusing commands on players without consent = revocation.</p></div></div>
+      <div class="rule"><div class="rnum">7</div><div class="rtxt"><h4>Keep Language Clean</h4><p>The in-game AI monitors chat. Repeated cursing escalates to warnings and mute.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Key Generator -->
+<section id="keygen">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="sec-eye">Key Generator</div>
+      <h2 class="sec-h">Get Your Access Key</h2>
+      <p class="sec-sub" style="margin:0 auto">No redirects. Everything happens here. Complete the steps below to generate your personal key.</p>
+    </div>
+    <div class="gen-wrap">
+      <div class="steps">
+        <div class="step" id="s1"><div class="step-n" id="sn1">1</div><p>Pick tier</p></div>
+        <div class="step" id="s2"><div class="step-n" id="sn2">2</div><p>Verify (30s)</p></div>
+        <div class="step" id="s3"><div class="step-n" id="sn3">3</div><p>Generate</p></div>
+        <div class="step" id="s4"><div class="step-n" id="sn4">4</div><p>Use in-game</p></div>
+      </div>
+
+      <!-- Step 1: Tier -->
+      <label class="fl">Step 1 — Select Your Tier</label>
+      <div class="sel-grid">
+        <div class="sel-t" id="svip" onclick="pickTier('VIP')">
+          <div class="sel-ico">⭐</div>
+          <div class="sel-name" style="color:#a855f7">VIP</div>
+          <div class="sel-desc">Basic access</div>
+        </div>
+        <div class="sel-t" id="strust" onclick="pickTier('Trusted')">
+          <div class="sel-ico">🔵</div>
+          <div class="sel-name" style="color:#3b82f6">Trusted</div>
+          <div class="sel-desc">Moderation access</div>
+        </div>
+      </div>
+
+      <!-- Step 2: Verify (no redirect, timer on this page) -->
+      <div class="verify-box" id="verifyBox">
+        <div class="v-header">
+          <div class="v-icon">🔒</div>
+          <div><div class="v-title">Step 2 — Quick Verification</div><div class="v-sub">Confirm you're human and you've read the rules</div></div>
+        </div>
+        <div class="v-body">
+          To prevent bots, you need to wait <strong style="color:var(--t1)">30 seconds</strong> on this page with it in focus. This confirms you've read and agree to the server rules above. No redirect needed.
+        </div>
+        <button class="v-start-btn" id="vStartBtn" onclick="startVerify()">▶ Start Verification (30 seconds)</button>
+        <div class="timer-wrap" id="timerWrap">
+          <div class="timer-top">
+            <div><div class="timer-num" id="timerNum">30</div></div>
+            <div class="timer-lbl">seconds<br>remaining</div>
+          </div>
+          <div class="timer-bar-bg"><div class="timer-bar-fill" id="timerFill" style="width:100%"></div></div>
+          <div class="timer-msg" id="timerMsg">Please keep this tab open and in focus...</div>
+        </div>
+        <button class="v-done-btn" id="vDoneBtn" onclick="doneVerify()">✅ Verification Complete — Continue</button>
+      </div>
+
+      <!-- Step 3: Generate -->
+      <div class="gen-form" id="genForm">
+        <label class="fl">Step 3 — Configure Your Key</label>
+        <div class="fr2">
+          <div>
+            <label class="fl" style="margin-bottom:6px">Username Format</label>
+            <select class="fi" id="uFmt" style="margin-bottom:0" onchange="toggleCustom()">
+              <option value="random">Random (e.g. SilverWolf482)</option>
+              <option value="custom">Custom username</option>
+            </select>
+          </div>
+          <div>
+            <label class="fl" style="margin-bottom:6px">Key Format</label>
+            <select class="fi" id="kFmt" style="margin-bottom:0">
+              <option value="4x3">XXXX-XXXX-XXXX</option>
+              <option value="4x4">XXXX-XXXX-XXXX-XXXX</option>
+              <option value="short">Short (8 chars)</option>
+            </select>
+          </div>
+        </div>
+        <div id="customWrap" style="display:none;margin-top:12px">
+          <label class="fl">Custom Username</label>
+          <input class="fi" type="text" id="customUser" placeholder="Your username (letters and numbers only)">
+        </div>
+        <button class="gen-btn" id="genBtn" onclick="generateKey()" style="margin-top:12px">⚡ Generate My Key</button>
+        <div class="gen-status" id="genStatus"></div>
+      </div>
+
+      <!-- Result -->
+      <div class="result" id="resultBox">
+        <div class="r-row"><span class="r-lbl">Username</span><span class="r-val" id="rUser"></span><button class="copy-btn" onclick="cp('rUser')">Copy</button></div>
+        <div class="r-row"><span class="r-lbl">Key</span><span class="r-val" id="rKey"></span><button class="copy-btn" onclick="cp('rKey')">Copy</button></div>
+        <div class="r-row"><span class="r-lbl">Tier</span><span class="r-val" id="rTier"></span></div>
+        <div class="r-note">✅ Your key has been sent to the game server automatically. It should work in-game within 30 seconds. Type <strong>/secretaappopen</strong> or press <strong>F2</strong> in-game to open the login panel.</div>
+      </div>
+
+      <!-- Key table -->
+      <div class="tbl-head" style="margin-top:32px">
+        <div class="tbl-title">📋 Your Generated Keys</div>
+        <input class="tbl-search" type="text" placeholder="Search..." oninput="renderTable();" id="srch">
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Username</th><th>Key</th><th>Tier</th><th>Date</th><th>Status</th><th></th></tr></thead>
+          <tbody id="keyTbl"><tr><td colspan="7" style="text-align:center;color:var(--t3);padding:24px;font-family:Inter,sans-serif">No keys yet.</td></tr></tbody>
+        </table>
+      </div>
+      <div class="tbl-actions">
+        <button class="tbl-btn" onclick="exportLua()">📤 Export Lua Table (backup)</button>
+        <button class="tbl-btn d" onclick="clearAll()">🗑 Clear All</button>
+      </div>
+      <textarea class="export-box" id="exportBox" placeholder="Export will appear here..." readonly></textarea>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--bg1)">
+  <div class="wrap">
+    <div class="sec-eye">FAQ</div>
+    <h2 class="sec-h">Common Questions</h2>
+    <div class="faq">
+      <div class="faq-item"><div class="faq-q" onclick="faqToggle(this)">How do I use my key in-game? <span class="arrow">›</span></div><div class="faq-a">Type <code>/secretaappopen</code> in Roblox chat, or press <strong>F2</strong> in-game. A login panel appears. Enter your username and key, click Authenticate, and wait 7 seconds.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="faqToggle(this)">Why doesn't my key work? <span class="arrow">›</span></div><div class="faq-a">If you generated a key through this site, it's sent automatically to the game server. It may take up to 30 seconds to activate. If it still doesn't work after a minute, contact Kshusha319.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="faqToggle(this)">Can I share my key? <span class="arrow">›</span></div><div class="faq-a">No. Your key is personal. Sharing it violates the rules and will get it revoked. Your friend should generate their own.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="faqToggle(this)">Can I type a random key to get in? <span class="arrow">›</span></div><div class="faq-a">No. The game server validates every login against a live database. If the key wasn't generated here, access is denied every time.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="faqToggle(this)">How do I get Admin or higher? <span class="arrow">›</span></div><div class="faq-a">Admin and above are invitation-only. Contact Kshusha319 directly if you believe you qualify. They are not available through this portal.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="faqToggle(this)">Is my key permanent? <span class="arrow">›</span></div><div class="faq-a">Keys are valid until they are revoked by an admin. They persist across sessions — you only need to enter it once per game session.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><div style="font-size:18px;font-weight:900;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px">A.APK.PANEL</div><p>Built by <strong>Kshusha319</strong> · Roblox Admin System v11 · Keys generated here are for authorised use only.</p></div></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  CONFIG — paste your Google Apps Script deployment URL here
+// ══════════════════════════════════════════════════════════════════
+var BACKEND_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+var TOKEN       = "AAPK_SECRET_2024_KSHUSHA"; // must match Apps Script
+
+// ── Matrix canvas ──────────────────────────────────────────────────
+(function(){
+  var c=document.getElementById('bg-canvas'),ctx=c.getContext('2d'),w,h,cols,drops;
+  var chars='01ΨλΩαβ█▓◆∞ABCDEF';
+  function sz(){w=c.width=innerWidth;h=c.height=innerHeight;cols=Math.floor(w/18);drops=Array(cols).fill(1)}
+  sz();window.addEventListener('resize',sz);
+  setInterval(function(){ctx.fillStyle='rgba(2,2,8,.06)';ctx.fillRect(0,0,w,h);ctx.font='13px monospace';drops.forEach(function(d,i){ctx.fillStyle='hsl('+(240+i%35)+',75%,'+(32+Math.random()*18)+'%)';ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*18,d*18);if(d*18>h&&Math.random()>.975)drops[i]=0;drops[i]++;});},55);
+})();
+
+// ── State ──────────────────────────────────────────────────────────
+var keys=JSON.parse(localStorage.getItem('aapk_v3')||'[]');
+var selTier='';
+var verified=false;
+
+// ── Tier picker ────────────────────────────────────────────────────
+function pickTier(t){
+  selTier=t;
+  document.getElementById('svip').className='sel-t'+(t==='VIP'?' active-vip':'');
+  document.getElementById('strust').className='sel-t'+(t==='Trusted'?' active-trust':'');
+  document.getElementById('verifyBox').classList.add('show');
+  document.getElementById('sn1').classList.add('done');
+  document.getElementById('verifyBox').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function scrollGen(t){document.getElementById('keygen').scrollIntoView({behavior:'smooth'});setTimeout(function(){pickTier(t)},350)}
+
+// ── Verification (30s, no redirect) ───────────────────────────────
+var timerInt=null;
+function startVerify(){
+  document.getElementById('vStartBtn').disabled=true;
+  document.getElementById('vStartBtn').textContent='⏳ Waiting...';
+  document.getElementById('timerWrap').classList.add('show');
+  var sec=30;
+  var fill=document.getElementById('timerFill');
+  var num=document.getElementById('timerNum');
+  var msg=document.getElementById('timerMsg');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(function(){fill.style.transition='width 1s linear';},20);
+  timerInt=setInterval(function(){
+    sec--;
+    num.textContent=sec;
+    fill.style.width=(sec/30*100)+'%';
+    if(sec<=5)msg.textContent='Almost done... '+sec+'s';
+    if(sec<=0){
+      clearInterval(timerInt);
+      num.textContent='✓';
+      fill.style.width='0%';
+      fill.style.background='var(--grn)';
+      msg.textContent='Verification complete!';
+      document.getElementById('vDoneBtn').classList.add('show');
+      document.getElementById('sn2').classList.add('done');
+    }
+  },1000);
+}
+function doneVerify(){
+  verified=true;
+  document.getElementById('verifyBox').style.display='none';
+  document.getElementById('genForm').classList.add('show');
+  document.getElementById('sn3').classList.add('done');
+  document.getElementById('genForm').scrollIntoView({behavior:'smooth',block:'center'});
+  toast('✅ Verified! Configure and generate your key.');
+}
+
+function toggleCustom(){
+  document.getElementById('customWrap').style.display=document.getElementById('uFmt').value==='custom'?'block':'none';
+}
+
+// ── Word lists ─────────────────────────────────────────────────────
+var A=['Silver','Crimson','Phantom','Shadow','Frozen','Blazing','Storm','Neon','Dark','Swift','Iron','Amber','Cosmic','Void','Titan','Ghost','Arctic','Ember','Lunar','Solar'];
+var N=['Wolf','Falcon','Dragon','Phoenix','Tiger','Hawk','Viper','Raven','Eagle','Fox','Lion','Bear','Panther','Cobra','Lynx','Puma','Shark','Jaguar','Condor','Orca'];
+function rUser(){return A[Math.floor(Math.random()*A.length)]+N[Math.floor(Math.random()*N.length)]+Math.floor(100+Math.random()*9000)}
+function seg(n){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='';for(var i=0;i<n;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
+
+// ── Generate key ───────────────────────────────────────────────────
+function generateKey(){
+  if(!selTier){toast('⚠ Select a tier first','err');return}
+  if(!verified){toast('⚠ Complete verification first','err');return}
+  var uFmt=document.getElementById('uFmt').value;
+  var username=uFmt==='custom'?document.getElementById('customUser').value.trim():rUser();
+  if(!username){toast('⚠ Enter a username','err');return}
+  if(keys.find(function(k){return k.username.toLowerCase()===username.toLowerCase()})){toast('⚠ Username taken — try again','err');return}
+  var kFmt=document.getElementById('kFmt').value;
+  var key=kFmt==='4x3'?seg(4)+'-'+seg(4)+'-'+seg(4):kFmt==='4x4'?seg(4)+'-'+seg(4)+'-'+seg(4)+'-'+seg(4):seg(8);
+  var entry={id:Date.now(),username:username.toLowerCase(),key:key.toLowerCase(),tier:selTier,created:new Date().toLocaleDateString(),status:'Active'};
+
+  // Save locally first
+  keys.unshift(entry);save();renderTable();showResult(entry);
+
+  // Send to backend if configured
+  var btn=document.getElementById('genBtn');
+  var status=document.getElementById('genStatus');
+  btn.disabled=true;btn.textContent='⏳ Sending to server...';
+  status.textContent='';status.style.color='var(--t3)';
+
+  if(BACKEND_URL==='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
+    // No backend configured — just local
+    btn.disabled=false;btn.textContent='⚡ Generate Another Key';
+    status.textContent='⚠ No backend configured. Export the Lua table manually.';
+    status.style.color='var(--yel)';
+    toast('Key saved locally. Export the Lua table to use in-game.');
+    verified=false;
+    return;
+  }
+
+  fetch(BACKEND_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'add_key',token:TOKEN,username:entry.username,key:entry.key,tier:entry.tier})
+  })
+  .then(function(r){return r.json()})
+  .then(function(d){
+    btn.disabled=false;btn.textContent='⚡ Generate Another Key';
+    if(d.success){
+      status.textContent='✅ Key sent to game server! Works in-game within 30 seconds.';
+      status.style.color='var(--grn)';
+      toast('✅ Key active in-game!');
+      document.getElementById('sn4').classList.add('done');
+    } else {
+      status.textContent='⚠ Server error: '+(d.error||'Unknown');
+      status.style.color='var(--yel)';
+    }
+    verified=false;
+  })
+  .catch(function(){
+    btn.disabled=false;btn.textContent='⚡ Generate Another Key';
+    status.textContent='⚠ Could not reach server. Key saved locally — export Lua table manually.';
+    status.style.color='var(--yel)';
+    verified=false;
+  });
+}
+
+function showResult(e){
+  var tc={VIP:'#a855f7',Trusted:'#3b82f6'};
+  document.getElementById('rUser').textContent=e.username;
+  document.getElementById('rKey').textContent=e.key;
+  document.getElementById('rTier').innerHTML='<span style="color:'+(tc[e.tier]||'#6366f1')+';font-weight:700">'+e.tier+'</span>';
+  document.getElementById('resultBox').classList.add('show');
+}
+
+// ── Table ──────────────────────────────────────────────────────────
+function renderTable(){
+  var q=(document.getElementById('srch').value||'').toLowerCase();
+  var f=keys.filter(function(k){return k.username.includes(q)||k.key.includes(q)||k.tier.toLowerCase().includes(q)});
+  var tb=document.getElementById('keyTbl');
+  if(!f.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:24px;font-family:Inter,sans-serif">No keys found.</td></tr>';return}
+  var tc={VIP:'bv',Trusted:'bt'};
+  tb.innerHTML=f.map(function(k,i){return'<tr><td style="color:var(--t4);font-family:Inter,sans-serif">'+(i+1)+'</td><td class="mono" style="color:var(--t1);font-weight:700">'+k.username+'</td><td class="mono">'+k.key+'</td><td><span class="badge '+(tc[k.tier]||'bv')+'">'+k.tier+'</span></td><td style="color:var(--t3);font-family:Inter,sans-serif">'+k.created+'</td><td><span class="badge '+(k.status==='Active'?'ba':'bu')+'">'+k.status+'</span></td><td><button class="del-btn" onclick="delKey('+k.id+')">✕</button></td></tr>'}).join('');
+}
+function delKey(id){
+  if(BACKEND_URL!==' https://script.google.com/macros/s/AKfycbxBnhA7fi67s3J1f33fFGtYyKFYJRIK_3BaLb5uWdOsqIBRcMthmRIZ7THcEmBZo3DOKw/exec'){
+    var k=keys.find(function(k){return k.id===id});
+    if(k){fetch(BACKEND_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete_key',token:TOKEN,username:k.username})}).catch(function(){})}
+  }
+  keys=keys.filter(function(k){return k.id!==id});save();renderTable();toast('Key deleted');
+}
+function clearAll(){
+  if(!confirm('Delete all keys?'))return;
+  if(BACKEND_URL!=='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'){
+    fetch(BACKEND_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'clear_all',token:TOKEN})}).catch(function(){});
+  }
+  keys=[];save();renderTable();document.getElementById('resultBox').classList.remove('show');document.getElementById('exportBox').value='';toast('All keys cleared');
+}
+function exportLua(){
+  var active=keys.filter(function(k){return k.status==='Active'});
+  if(!active.length){toast('No active keys','err');return}
+  var lua='-- A.APK.PANEL Generated Keys -- '+new Date().toLocaleString()+'\nlocal VALID_KEYS = {\n';
+  active.forEach(function(k){lua+='\t{ username="'+k.username+'", key="'+k.key+'", tier="'+k.tier+'" },\n'});
+  lua+='}';
+  document.getElementById('exportBox').value=lua;
+  toast('📤 Lua table ready');
+}
+function save(){localStorage.setItem('aapk_v3',JSON.stringify(keys))}
+
+// ── Utilities ──────────────────────────────────────────────────────
+function cp(id){var t=document.getElementById(id).textContent;navigator.clipboard.writeText(t).then(function(){toast('📋 Copied!')}).catch(function(){var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('📋 Copied!')})}
+function faqToggle(el){el.parentElement.classList.toggle('open')}
+var toastT;
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type==='err'?' err':'')+' show';clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},3000)}
+renderTable();
+</script>
+</body>
+</html>
